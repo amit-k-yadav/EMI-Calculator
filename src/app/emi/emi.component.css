@@ -1,0 +1,31 @@
+.row{
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 2%;
+}
+.example-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .container-form{
+      padding-left: 5%;
+      padding-right: 5%;
+  }
+
+  .mat-form-field-underline{
+    width:100% !important;
+  }
+
+  .container-form > mat-form-field {
+    width: 100%;
+    padding: 5px;
+  }
+
+  .inputROI{
+    width: 50%;
+  }
+  mat-slider {
+    width: 100% !important;
+  }
+  
