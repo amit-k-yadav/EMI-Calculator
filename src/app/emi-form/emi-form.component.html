@@ -1,0 +1,186 @@
+<form [formGroup]="formGroup">
+	<mat-horizontal-stepper linear #stepper>
+		<mat-step>
+			<ng-template matStepLabel>Fill out your favorite bike details</ng-template>
+			<form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm">
+				<div class="container row">
+					<div class="col-md-6">
+						<mat-form-field>
+							<input matInput class="form-control" name="name" placeholder="Name" 
+							[formControl]="name" [(ngModel)]="model.name" 
+							[ngClass]="{ 'is-invalid': f.submitted && name.invalid }" required />
+							<div *ngIf="f.submitted && name.invalid" class="invalid-feedback">
+									<div *ngIf="name.errors.required">Name is required</div>
+							</div>
+						</mat-form-field>
+
+						<br>
+
+						<mat-form-field>
+							<input maxlength="10" minlength="10" matInput class="form-control" name="mobileNumber"
+							placeholder="Contact Number" 
+							[formControl]="mobileNumber" [(ngModel)]="model.mobileNumber" 
+							[ngClass]="{ 'is-invalid': f.submitted && mobileNumber.invalid }" required />
+							<div *ngIf="f.submitted && mobileNumber.invalid" class="invalid-feedback">
+									<div *ngIf="mobileNumber.errors.required">Contact is required</div>
+							</div>
+						</mat-form-field>
+
+						<br>
+
+						<mat-form-field>
+							<input matInput class="form-control" name="email" placeholder="email"
+							[(ngModel)]="model.email" [formControl]="email"
+							[ngClass]="{ 'is-invalid': f.submitted && email.invalid }" required email />
+							<div *ngIf="f.submitted && email.invalid" class="invalid-feedback">
+									<div *ngIf="email.errors.required">Email is required</div>
+							</div>
+						</mat-form-field>
+
+						<br> <br>
+						<mat-form-field>
+							<mat-select  required placeholder="Select Bike Model" name="selectedModel" 
+							[(ngModel)]="model.selectedModelPrice">
+								<mat-option
+								*ngFor="let bikeModel of bikeModels" 
+								value="{{bikeModel.price}}" (click)="bikeSelected(bikeModel)"
+								(click)="calculateTotalAmount()">{{bikeModel.model}}</mat-option>
+							</mat-select>
+						</mat-form-field>
+						<br>
+						<mat-form-field>
+							<input matInput placeholder="Bike Price" disabled value="{{model.selectedModelPrice}}">
+						</mat-form-field>
+						
+						<br>
+
+						<mat-form-field>
+							<input type="number" matInput class="form-control" name="downPayment"
+							placeholder="Down Payment" [formControl]="downPayment" [(ngModel)]="model.downPayment" 
+							(input)="downPaymentEntered($event.target.value)"
+							(input)="calculateTotalAmount()"
+							[ngClass]="{ 'is-invalid': f.submitted && downPayment.invalid }" required />
+							<div *ngIf="f.submitted && downPayment.invalid" class="invalid-feedback">
+								<div *ngIf="downPayment.errors.required">Down Payment is required</div>
+							</div>
+						</mat-form-field>
+
+						<br>
+
+						<mat-form-field>
+							<input matInput placeholder="Loan Amount" disabled value="{{loanAmount}}">
+						</mat-form-field>
+						<br><br>
+						<div class="form-group" id="confirmButton">
+							<button class="btn btn-primary" (click)="goForward(stepper)" >Confirm</button>
+						</div>
+					</div>
+
+					<div class="col-md-6 col-lg-6 col-sm-6 other-column">
+						<mat-form-field class="inputROI">
+							<input 
+							type="number" 
+							matInput 
+							class="form-control" 
+							[formControl]="ROI" 
+							[(ngModel)]="model.roi"
+							placeholder="Enter or Slide for Rate of Interest"  
+							name="ROI"
+							[ngClass]="{ 'is-invalid': f.submitted && ROI.invalid }"
+							(input)="showChart()"
+							(input)="calculateTotalAmount(model.roi)" 
+							required>
+							<div *ngIf="f.submitted && ROI.invalid" class="invalid-feedback">
+								<div *ngIf="ROI.errors.required">Rate of Interest is required</div>
+							</div>
+						</mat-form-field> <br>
+						
+						<mat-slider 
+								[(value)]="model.roi" thumbLabel="True" 
+								tickInterval="auto" value="number" 
+								min="0" max="20" step="1"
+								[(ngModel)]="model.roi"
+								[ngModelOptions]="{standalone: true}"
+								(click)="showChart()"
+								(click)="calculateTotalAmount(model.roi)">
+						</mat-slider>
+						<br> <br>
+						<div  id="chart">
+							<canvas baseChart
+								[data]="lineChartData"
+								[labels]="lineChartLabels"
+								[options]="lineChartOptions"
+								[chartType]="lineChartType"
+								(chartHover)="chartHovered($event)"
+								(chartClick)="chartClicked($event)">
+							</canvas>
+							<br> <br> <br>
+							<mat-form-field class="inputROI">
+								<input 
+								matInput
+								type="number"
+								class="form-control" 
+								[formControl]="tenureControl"
+								placeholder="Enter or Slide for Tenure in years" 
+								[(value)]="model.tenure"
+								[(ngModel)]="model.tenure" 
+								
+								(input)="showChart()"
+								(input)="calculateTotalAmount(rateOfIneterest)"
+								required>
+								<div *ngIf="f.submitted && tenureControl.invalid" class="invalid-feedback">
+									<div *ngIf="tenureControl.errors.required">Tenure is required</div>
+								</div>
+							</mat-form-field><br>
+							
+							<mat-slider 
+									[(value)]="tenure" thumbLabel="True" 
+									tickInterval="auto" value="number" 
+									min="1" max="5" step="1"
+									[(ngModel)]="model.tenure"
+									[ngModelOptions]="{standalone: true}"
+									(click)="showChart()"
+									(click)="calculateTotalAmount(rateOfIneterest)">
+							</mat-slider>
+						</div>
+					</div>
+				</div>
+			</form>
+		</mat-step>
+		<mat-step>
+			<ng-template matStepLabel>Detailed Summary</ng-template>
+			<div class="row details-class">
+
+			</div>
+			<h2>Below Are your details</h2> <br>
+			<table style="width:100%">
+				<tr>
+					<th><h6><span class="text-primary">Name</span></h6></th>
+					<th><h6><span class="text-primary">Contact Number</span></h6></th>
+					<th><h6><span class="text-primary">Email Address</span></h6></th>
+					<th><h6><span class="text-primary">Select Bike Model Name</span></h6></th>
+					<th><h6><span class="text-primary">{{model.selectedModelName}} Price</span></h6></th>
+					<th><h6><span class="text-primary">Down Payment</span></h6></th>
+					<th><h6><span class="text-primary">Loan Amount</span></h6></th>
+					<th><h6><span class="text-primary">Rate Of Interest</span></h6></th>
+					<th><h6><span class="text-primary">Tenure (in years)</span></h6></th>
+				</tr>
+				<tr>
+					<th><h6>{{model.name}}</h6></th>
+					<th><h6>{{model.mobileNumber}}</h6></th> 
+					<th><h6>{{model.email}}</h6></th>
+					<th><h6>{{model.selectedModelName}}</h6></th>
+					<th><h6>{{model.selectedModelPrice}}</h6></th>
+					<th><h6>{{model.downPayment}}</h6></th>
+					<th><h6>{{model.loanAmount}}</h6></th>
+					<th><h6>{{model.roi}}</h6></th>
+					<th><h6>{{model.tenure}}</h6></th>
+				</tr>
+			</table>
+			<br><br>
+			<div class="form-group">
+				<button class="btn btn-primary" (click)="goBack(stepper)">Go Back</button>
+			</div>
+		</mat-step>
+	</mat-horizontal-stepper>
+</form>

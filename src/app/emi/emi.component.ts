@@ -22,6 +22,7 @@ export class EmiComponent implements OnInit {
   rateOfIneterest:number;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
+  formGroup: FormGroup;
   isEditable = false;
   model: any = {};
 
@@ -33,6 +34,9 @@ export class EmiComponent implements OnInit {
     });
     this.secondFormGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required]
+    });
+    this.formGroup = this._formBuilder.group({
+      thirdCtrl: ['', Validators.required]
     });
   }
 

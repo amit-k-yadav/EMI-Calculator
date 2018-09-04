@@ -12,11 +12,13 @@ import {MatButtonModule, MatCheckboxModule, MatInputModule, MatSelectModule} fro
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatSliderModule, MatSlider} from '@angular/material/slider';
 import { ChartsModule } from 'ng2-charts';
+import { EmiFormComponent } from './emi-form/emi-form.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    EmiComponent
+    EmiComponent,
+    EmiFormComponent
   ],
   imports: [
     ChartsModule,

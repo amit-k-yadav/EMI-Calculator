@@ -1,0 +1,46 @@
+mat-form-field {
+    width: 100%;
+    padding: 5px;
+  }
+
+mat-slider {
+    width: 100% !important;
+}
+
+#chart{
+    display: none;
+}
+
+:host /deep/ .mat-horizontal-stepper-header{
+    pointer-events: none !important;
+}
+
+.other-column{
+    position: absolute;
+    right:0
+}
+
+.details-class{
+    text-align: center;
+}
+
+
+#confirmButton{
+    display: none;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
