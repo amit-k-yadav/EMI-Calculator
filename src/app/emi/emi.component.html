@@ -1,7 +1,35 @@
+<!-- <div class="container">
+	<mat-horizontal-stepper linear #stepper>
+		<mat-step [stepControl]="firstFormGroup" >
+			<form [formGroup]="firstFormGroup">
+				<ng-template matStepLabel>Fill out your favorite bike details</ng-template>
+				<mat-form-field>
+					<input matInput placeholder="Last name, First name" formControlName="firstCtrl" required>
+				</mat-form-field>
+				<div>
+					<button mat-button matStepperNext>Next</button>
+				</div>
+			</form>
+		</mat-step>
+		<mat-step [stepControl]="secondFormGroup">
+			<form [formGroup]="secondFormGroup">
+				<ng-template matStepLabel>Fill out your address</ng-template>
+				<mat-form-field>
+					<input matInput placeholder="Address" formControlName="secondCtrl" required>
+				</mat-form-field>
+				<div>
+					<button mat-button matStepperPrevious>Back</button>
+					<button mat-button matStepperNext>Next</button>
+				</div>
+			</form>
+		</mat-step>
+	</mat-horizontal-stepper>
+</div> -->
 <div class="row">
 	<div class="container-form col-sm-6 col-md-6 col-lg-6">
 		<mat-form-field>
-			<input matInput required placeholder="Name">
+			<input matInput required placeholder="Name" [formControl]="name" required>
+			<mat-error *ngIf="name.invalid">{{getNameErrorMessage()}}</mat-error>
 		</mat-form-field>
 
 		<mat-form-field>
@@ -16,7 +44,11 @@
 		<br><br>
 		<mat-form-field>
 			<mat-select placeholder="Select Bike Model" [(ngModel)]="selectedModelPrice" >
-			<mat-option *ngFor="let bikeModel of bikeModels" value="{{bikeModel.price}}">{{bikeModel.model}}</mat-option>
+				<mat-option 
+				(click)="calculateTotalAmount(rateOfIneterest)"
+				(click)="downPaymentEntered(downPayment)"
+				*ngFor="let bikeModel of bikeModels" 
+				value="{{bikeModel.price}}">{{bikeModel.model}}</mat-option>
 			</mat-select>
 		</mat-form-field>
 
@@ -27,24 +59,51 @@
 		<br><br>
 		<mat-form-field>
 			<input matInput placeholder="Down Payment" value="{{downPayment}}" [(ngModel)]="downPayment"
-				(input)="downPaymentEntered($event.target.value)" type="number">
+				(input)="downPaymentEntered($event.target.value)" (input)="calculateTotalAmount(rateOfIneterest)" type="number">
 			<mat-error *ngIf="pattern">{{getDPErrorMessage()}}</mat-error>
 		</mat-form-field>
 
 		<mat-form-field>
 			<input matInput placeholder="Loan Amount" disabled value="{{loanAmount}}" [(ngModel)]="loanAmount">
 		</mat-form-field>
+
+		<button type="button" class="btn btn-primary">Submit</button>
 		
 	</div>
 	<div class="container col-sm-6 col-md-6 col-lg-6">
 		<mat-form-field class="inputROI">
-			<input matInput placeholder="Enter or Slide for Rate of Interest" [(value)]="rateOfIneterest" [(ngModel)]="rateOfIneterest">
+			<input (input)="calculateTotalAmount(rateOfIneterest)" (input)="showChart()" matInput 
+			placeholder="Enter or Slide for Rate of Interest" [(value)]="rateOfIneterest" [(ngModel)]="rateOfIneterest">
 		</mat-form-field> <br>
 		<mat-slider 
 				[(value)]="rateOfIneterest" thumbLabel="True" 
 				tickInterval="auto" value="number" 
 				min="5" max="20" step="1"
-				(click)="selectedROI(rateOfIneterest)">
+				(click)="showChart()"
+				(click)="calculateTotalAmount(rateOfIneterest)">
 		</mat-slider>
+		<br> <br>
+		<div  id="chart">
+			<canvas baseChart
+				[data]="lineChartData"
+				[labels]="lineChartLabels"
+				[options]="lineChartOptions"
+				[chartType]="lineChartType"
+				(chartHover)="chartHovered($event)"
+				(chartClick)="chartClicked($event)">
+			</canvas>
+			<br> <br>
+			<mat-form-field class="inputROI">
+					<input matInput 
+					placeholder="Enter or Slide for Tenure in years" [(value)]="tenure" [(ngModel)]="tenure">
+			</mat-form-field> <br>
+			<mat-slider 
+					[(value)]="tenure" thumbLabel="True" 
+					tickInterval="auto" value="number" 
+					min="1" max="5" step="1"
+					(click)="showChart()"
+					(click)="calculateTotalAmount(rateOfIneterest)">
+			</mat-slider>
+		</div>
 	</div>
 </div>

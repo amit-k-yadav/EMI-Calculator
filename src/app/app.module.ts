@@ -9,7 +9,9 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatButtonModule, MatCheckboxModule, MatInputModule, MatSelectModule} from '@angular/material';
+import {MatStepperModule} from '@angular/material/stepper';
 import {MatSliderModule, MatSlider} from '@angular/material/slider';
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -17,6 +19,7 @@ import {MatSliderModule, MatSlider} from '@angular/material/slider';
     EmiComponent
   ],
   imports: [
+    ChartsModule,
     BrowserModule,
     FormsModule, 
     ReactiveFormsModule,
@@ -26,6 +29,7 @@ import {MatSliderModule, MatSlider} from '@angular/material/slider';
     MatSelectModule,
     MatCheckboxModule,
     MatSliderModule,
+    MatStepperModule,
     BrowserAnimationsModule
   ],
   providers: [],

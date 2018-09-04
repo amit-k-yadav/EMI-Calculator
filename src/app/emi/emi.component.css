@@ -28,4 +28,7 @@
   mat-slider {
     width: 100% !important;
   }
-  
+
+  #chart{
+    display: none;
+  }
