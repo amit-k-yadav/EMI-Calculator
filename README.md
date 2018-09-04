@@ -10,5 +10,5 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## App Demonstration:
+## App in Action:
 ![](https://github.com/amit-k-yadav/EMI-Calculator-in-Angular-6/blob/master/Emi-FullScreen.gif)
